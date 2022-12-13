@@ -270,7 +270,12 @@ public class Migration {
                     logger.log(Level.WARNING, sm.getString("migration.skipSignatureFile", srcName));
                     continue;
                 }
-                String destName = profile.convert(srcName);
+                String destName;
+                if (!isExcluded(srcName)) {
+                    destName = profile.convert(srcName);
+                } else {
+                    destName = srcName;
+                }
                 if (srcZipEntry.getMethod() == ZipEntry.STORED) {
                     ByteArrayOutputStream tempBuffer = new ByteArrayOutputStream((int) (srcZipEntry.getSize() * 1.05));
                     migrateStream(srcName, srcZipStream, tempBuffer);
